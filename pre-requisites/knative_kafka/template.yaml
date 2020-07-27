@@ -1,0 +1,31 @@
+kind: Template
+apiVersion: v1
+metadata:
+  annotations:
+    tags: knative-kafka-operator
+  name: knative-kafka-operator
+objects:
+- kind: Subscription
+  apiVersion: operators.coreos.com/v1alpha1
+  metadata:
+    name: "knative-kafka-operator"
+    namespace: "${NAMESPACE}"
+  spec:
+    channel: "${CHANNEL}"
+    installPlanApproval: "Automatic"
+    source: "community-operators"
+    sourceNamespace: "openshift-marketplace"
+    name: "knative-kafka-operator"
+
+parameters:
+    #CHANNEL_ELASTICSEARCH=$(/usr/local/bin/oc get packagemanifest elasticsearch-operator -n openshift-marketplace -o jsonpath='{.status.channels[].name}')
+  - name: CHANNEL
+    displayName: Channel
+    description: Channel
+    required: true
+    value: "stable"
+  - name: NAMESPACE
+    displayName: Namespace
+    description: Namespace
+    required: true
+    value: "openshift-operators"

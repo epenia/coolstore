@@ -1,0 +1,46 @@
+kind: Template
+apiVersion: v1
+metadata:
+  annotations:
+    tags: workspaces
+  name: workspaces
+objects:
+#########################################
+## CREATE NAMESPACES
+#########################################
+- kind: Namespace
+  apiVersion: v1
+  metadata:
+    name: "${NAMESPACE_WORKSPACES}"
+- kind: OperatorGroup
+  apiVersion: operators.coreos.com/v1
+  metadata:
+    name: "${NAMESPACE_WORKSPACES}"
+    namespace: "${NAMESPACE_WORKSPACES}"
+  spec:
+    targetNamespaces:
+    - "${NAMESPACE_WORKSPACES}"
+- kind: Subscription
+  apiVersion: operators.coreos.com/v1alpha1
+  metadata:
+    generateName: "workspaces-"
+    namespace: "${NAMESPACE_WORKSPACES}"
+  spec:
+    channel: "${CHANNEL_WORKSPACES}"
+    installPlanApproval: "Automatic"
+    source: "redhat-operators"
+    sourceNamespace: "openshift-marketplace"
+    name: "codeready-workspaces"
+
+parameters:
+    #CHANNEL_ELASTICSEARCH=$(/usr/local/bin/oc get packagemanifest elasticsearch-operator -n openshift-marketplace -o jsonpath='{.status.channels[].name}')
+  - name: CHANNEL_WORKSPACES
+    displayName: Channel workspaces
+    description: Channel for workspaces
+    required: true
+
+  - name: NAMESPACE_WORKSPACES
+    displayName: Namespace for workspaces
+    description: Namespace for workspaces
+    required: true
+    value: "workspaces"

@@ -1,0 +1,22 @@
+kind: Template
+apiVersion: v1
+metadata:
+  annotations:
+    tags: knative
+  name: knativeserving
+objects:
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+   name: "${NAMESPACE_KNATIVE}"
+- apiVersion: operator.knative.dev/v1alpha1
+  kind: KnativeServing
+  metadata:
+    name: knative-serving
+    namespace: "${NAMESPACE_KNATIVE}"
+  spec: {}
+parameters:
+  - name: NAMESPACE_KNATIVE
+    displayName: Namespace for KNATIVE
+    description: Namespace for KNATIVE
+    required: true

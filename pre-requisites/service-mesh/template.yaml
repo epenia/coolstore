@@ -1,0 +1,74 @@
+kind: Template
+apiVersion: v1
+metadata:
+  annotations:
+    tags: servicemesh
+  name: servicemesh
+objects:
+- kind: Subscription
+  apiVersion: operators.coreos.com/v1alpha1
+  metadata:
+    name: elasticsearch-operator
+    namespace: "${NAMESPACE_SERVICEMESH}"
+  spec:
+    channel: "${CHANNEL_ELASTICSEARCH}"
+    installPlanApproval: Automatic
+    name: elasticsearch-operator
+    source: redhat-operators
+    sourceNamespace: openshift-marketplace
+- kind: Subscription
+  apiVersion: operators.coreos.com/v1alpha1
+  metadata:
+    name: jaeger-product
+    namespace: "${NAMESPACE_SERVICEMESH}"
+  spec:
+    channel: ${CHANNEL_JAEGER}
+    installPlanApproval: Automatic
+    name: jaeger-product
+    source: redhat-operators
+    sourceNamespace: openshift-marketplace
+- kind: Subscription
+  apiVersion: operators.coreos.com/v1alpha1
+  metadata:
+    name: kiali-ossm
+    namespace: "${NAMESPACE_SERVICEMESH}"
+  spec:
+    channel: ${CHANNEL_KIALI}
+    installPlanApproval: Automatic
+    name: kiali-ossm
+    source: redhat-operators
+    sourceNamespace: openshift-marketplace
+- kind: Subscription
+  apiVersion: operators.coreos.com/v1alpha1
+  metadata:
+    name: servicemeshoperator
+    namespace: "${NAMESPACE_SERVICEMESH}"
+  spec:
+    channel: "${CHANNEL_SERVICEMESH}"
+    installPlanApproval: Automatic
+    name: servicemeshoperator
+    source: redhat-operators
+    sourceNamespace: openshift-marketplace
+parameters:
+  - name: CHANNEL_SERVICEMESH
+    displayName: Channel Service Mesh
+    description: Channel for the Service Mesh Operator
+    required: true
+  - name: CHANNEL_KIALI
+    displayName: Channel Kiali
+    description: Channel for the Kiali Operator
+    required: true
+  - name: CHANNEL_JAEGER
+    displayName: Channel Jaeger
+    description: Channel for the Jaeger Operator
+    required: true
+    #CHANNEL_ELASTICSEARCH=$(/usr/local/bin/oc get packagemanifest elasticsearch-operator -n openshift-marketplace -o jsonpath='{.status.channels[].name}')
+  - name: CHANNEL_ELASTICSEARCH
+    displayName: Channel Elasticsearch
+    description: Channel for the Elasticsearch Operator
+    required: true
+  - name: NAMESPACE_SERVICEMESH
+    displayName: Namespace for Service Mesh
+    description: Namespace for Service Mesh
+    required: true
+    value: "openshift-operators"
