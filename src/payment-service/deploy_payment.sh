@@ -1,12 +1,14 @@
 #!/bin/bash
 
-
 mvn quarkus:add-extension -Dextensions="kafka"
 
 mvn clean package -Pnative -DskipTests
 
 oc new-build quay.io/quarkus/ubi-quarkus-native-binary-s2i:1.0 --binary --name=payment -l app=payment
 oc start-build payment --from-file target/*-runner --follow
+
+oc delete dc/payment
+
 
 
 
@@ -28,6 +30,8 @@ spec:
       containers:
         # Replace Project name userXX-cloudnativeapps with project in which payment is deployed
       - image: $payment_image:1.0-SNAPSHOT
+        ports:
+          - containerPort: 8080
 EOF
 
 
@@ -51,8 +55,9 @@ EOF
 
 
 
-
-oc label ksvc/payment app.kubernetes.io/part-of=payment --overwrite 
+oc label rev/payment-v1 app.openshift.io/runtime=quarkus --overwrite
+oc label ksvc/payment app.kubernetes.io/part-of=payment --overwrite
 oc label dc/payment app.kubernetes.io/part-of=payment --overwrite && \
 oc annotate dc/payment app.openshift.io/connects-to=my-cluster --overwrite && \
 oc annotate dc/payment app.openshift.io/vcs-ref=ocp-4.4 --overwrite
+oc annotate ksvc/payment   app.openshift.io/connects-to=my-cluster --overwrite 
