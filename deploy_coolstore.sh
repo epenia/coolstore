@@ -8,7 +8,7 @@ cd src
 #######################
 cd inventory-service
 chmod +x deploy_inventory.sh
-./deploy.inventory.sh
+./deploy_inventory.sh
 cd ..
 
 
