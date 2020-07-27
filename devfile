@@ -1,5 +1,10 @@
 metadata:
   name: coolstore-workspace
+projects:
+  - name: coolstore
+    source:
+      type: git
+      location: 'https://github.com/luisarizmendi/coolstore.git'
 components:
   - id: redhat/quarkus-java11/latest
     type: chePlugin

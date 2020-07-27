@@ -23,4 +23,4 @@ oc label dc/inventory app.kubernetes.io/part-of=inventory --overwrite && \
 oc label dc/inventory-database app.kubernetes.io/part-of=inventory app.openshift.io/runtime=postgresql --overwrite && \
 oc annotate dc/inventory app.openshift.io/connects-to=inventory-database --overwrite && \
 oc annotate dc/inventory app.openshift.io/vcs-ref=ocp-4.4 --overwrite
-
+oc annotate dc/inventory app.openshift.io/vcs-uri=https://https://github.com/luisarizmendi/coolstore.git --overwrite
