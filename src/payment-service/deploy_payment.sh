@@ -53,11 +53,11 @@ spec:
 EOF
 
 
-
+sleep 30
 
 oc label rev/payment-v1 app.openshift.io/runtime=quarkus --overwrite
 oc label ksvc/payment app.kubernetes.io/part-of=payment --overwrite
-oc label dc/payment app.kubernetes.io/part-of=payment --overwrite && \
-oc annotate dc/payment app.openshift.io/connects-to=my-cluster --overwrite && \
-oc annotate dc/payment app.openshift.io/vcs-ref=ocp-4.4 --overwrite
-oc annotate ksvc/payment   app.openshift.io/connects-to=my-cluster --overwrite 
+#oc label dc/payment app.kubernetes.io/part-of=payment --overwrite
+#oc annotate dc/payment app.openshift.io/connects-to=my-cluster --overwrite && \
+#oc annotate dc/payment app.openshift.io/vcs-ref=ocp-4.4 --overwrite
+oc annotate ksvc/payment   app.openshift.io/connects-to=my-cluster --overwrite

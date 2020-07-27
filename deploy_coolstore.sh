@@ -142,3 +142,8 @@ cd payment-service
 chmod +x deploy_payment.sh
 ./deploy_payment.sh
 cd ..
+
+
+
+
+cd ..
