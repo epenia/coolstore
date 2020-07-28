@@ -1,0 +1,22 @@
+kind: Template
+apiVersion: v1
+metadata:
+  annotations:
+    tags: knative-kafka-operator
+  name: knative-kafka-operator2
+objects:
+- apiVersion: eventing.knative.dev/v1alpha1
+  kind: KnativeEventingKafka
+  metadata:
+    name: knative-eventing-kafka
+    labels: {}
+    namespace: "${NAMESPACE_APP}"
+  spec:
+    bootstrapServers: 'my-cluster-kafka-bootstrap.kafka:9092'
+    setAsDefaultChannelProvisioner: true
+parameters:
+  - name: NAMESPACE_APP
+    displayName: Namespace for Coolstore app
+    description: Namespace for Coolstore app
+    required: true
+    value: "knative-eventing"
