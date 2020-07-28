@@ -5,9 +5,9 @@ mvn quarkus:add-extension -Dextensions="kafka"
 mvn clean package -Pnative -DskipTests
 
 #oc new-build quay.io/quarkus/ubi-quarkus-native-binary-s2i:1.0 --binary --name=payment -l app=payment
-#oc start-build payment --from-file target/*-runner --follow
+#oc start-build payment --from-file target/payment-1.0-SNAPSHOT-runner --follow
 
-#oc delete dc/payment
+oc delete dc/payment
 
 
 
@@ -53,7 +53,6 @@ spec:
 EOF
 
 
-sleep 30
 
 oc label rev/payment-v1 app.openshift.io/runtime=quarkus --overwrite
 oc label ksvc/payment app.kubernetes.io/part-of=payment --overwrite
