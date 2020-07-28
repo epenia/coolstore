@@ -34,6 +34,8 @@ spec:
           - containerPort: 8080
 EOF
 
+sleep 10
+
 
 oc create -f - <<EOF
 apiVersion: sources.knative.dev/v1alpha1
@@ -52,6 +54,7 @@ spec:
       name: payment
 EOF
 
+sleep 5
 
 
 oc label rev/payment-v1 app.openshift.io/runtime=quarkus --overwrite
