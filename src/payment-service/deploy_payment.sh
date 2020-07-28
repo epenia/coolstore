@@ -7,9 +7,6 @@ mvn clean package -Pnative -DskipTests
 oc new-build quay.io/quarkus/ubi-quarkus-native-binary-s2i:1.0 --binary --name=payment -l app=payment
 oc start-build payment --from-file target/payment-1.0-SNAPSHOT-runner --follow
 
-oc delete dc/payment
-
-
 
 
 payment_image=$(oc get is | grep payment | awk '{print $2}')
@@ -29,7 +26,7 @@ spec:
     spec:
       containers:
         # Replace Project name userXX-cloudnativeapps with project in which payment is deployed
-      - image: $payment_image:1.0-SNAPSHOT
+      - image: $payment_image:latest
         ports:
           - containerPort: 8080
 EOF
