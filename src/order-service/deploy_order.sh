@@ -13,6 +13,7 @@ oc new-app order
 oc expose svc/order
 
 
+oc label dc/order app.openshift.io/runtime=quarkus  --overwrite
 oc label dc/order app.kubernetes.io/part-of=order --overwrite && \
 oc label dc/order-database app.kubernetes.io/part-of=order app.openshift.io/runtime=mongodb --overwrite && \
 oc annotate dc/order app.openshift.io/connects-to=my-cluster,order-database --overwrite && \
