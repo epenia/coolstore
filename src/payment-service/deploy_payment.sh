@@ -4,10 +4,10 @@ mvn quarkus:add-extension -Dextensions="kafka"
 
 mvn clean package -Pnative -DskipTests
 
-oc new-build quay.io/quarkus/ubi-quarkus-native-binary-s2i:1.0 --binary --name=payment -l app=payment
-oc start-build payment --from-file target/*-runner --follow
+#oc new-build quay.io/quarkus/ubi-quarkus-native-binary-s2i:1.0 --binary --name=payment -l app=payment
+#oc start-build payment --from-file target/*-runner --follow
 
-oc delete dc/payment
+#oc delete dc/payment
 
 
 

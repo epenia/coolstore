@@ -6,11 +6,11 @@ mvn quarkus:add-extension -Dextensions="resteasy-jsonb,mongodb-client"
 mvn quarkus:add-extension -Dextensions="kafka"
 mvn clean package -DskipTests
 
-oc new-build registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:1.5 --binary --name=order -l app=order
-oc start-build order --from-file target/*-runner.jar --follow
+#oc new-build registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:1.5 --binary --name=order -l app=order
+#oc start-build order --from-file target/*-runner.jar --follow
 
-oc new-app order
-oc expose svc/order
+#oc new-app order
+#oc expose svc/order
 
 
 oc label dc/order app.openshift.io/runtime=quarkus  --overwrite

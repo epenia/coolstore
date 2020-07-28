@@ -23,17 +23,6 @@ cd ..
 
 
 
-########################
-# WEB-UI Service
-#######################
-cd coolstore-ui
-chmod +x deploy_webui.sh
-./deploy_webui.sh
-cd ..
-
-
-
-
 
 ##### KAFKA ########################
 
@@ -42,7 +31,6 @@ apiVersion: kafka.strimzi.io/v1beta1
 kind: Kafka
 metadata:
   name: my-cluster
-  namespace: coolstore
 spec:
   kafka:
     version: 2.5.0
@@ -82,7 +70,6 @@ metadata:
   name: orders
   labels:
     strimzi.io/cluster: my-cluster
-  namespace: coolstore
 spec:
   partitions: 10
   replicas: 3
@@ -99,7 +86,6 @@ metadata:
   name: payments
   labels:
     strimzi.io/cluster: my-cluster
-  namespace: coolstore
 spec:
   partitions: 10
   replicas: 3
@@ -130,6 +116,19 @@ cd order-service
 chmod +x deploy_order.sh
 ./deploy_order.sh
 cd ..
+
+
+
+
+
+########################
+# WEB-UI Service
+#######################
+cd coolstore-ui
+chmod +x deploy_webui.sh
+./deploy_webui.sh
+cd ..
+
 
 
 

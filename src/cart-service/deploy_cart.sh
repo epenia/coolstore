@@ -6,11 +6,11 @@ mvn quarkus:add-extension -Dextensions="openshift"
 mvn quarkus:add-extension -Dextensions="kafka"
 mvn clean package -DskipTests
 
-oc new-build registry.access.redhat.com/ubi8/openjdk-11 --binary --name=cart -l app=cart
-oc start-build cart --from-file target/*-runner.jar --follow
+#oc new-build registry.access.redhat.com/ubi8/openjdk-11 --binary --name=cart -l app=cart
+#oc start-build cart --from-file target/*-runner.jar --follow
 
-oc new-app cart
-oc expose svc/cart
+#oc new-app cart
+#oc expose svc/cart
 
 
 oc label dc/cart app.kubernetes.io/part-of=cart app.openshift.io/runtime=quarkus --overwrite && \
