@@ -7,6 +7,7 @@ mvn clean package -Pnative -DskipTests
 oc new-build quay.io/quarkus/ubi-quarkus-native-binary-s2i:1.0 --binary --name=payment -l app=payment
 oc start-build payment --from-file target/payment-1.0-SNAPSHOT-runner --follow
 
+sleep 5
 
 my_project=$(oc project | awk -F \" '{print $2}')
 
