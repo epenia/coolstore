@@ -9,6 +9,8 @@ oc new-app -e POSTGRESQL_USER=inventory \
 mvn quarkus:add-extension -Dextensions="jdbc-postgresql"
 mvn clean package -DskipTests
 
+sleep 5
+
 oc new-build registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:1.5 --binary --name=inventory -l app=inventory
 
 oc start-build inventory --from-file target/*-runner.jar --follow
