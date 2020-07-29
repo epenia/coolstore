@@ -8,6 +8,8 @@ oc new-app -e POSTGRESQL_USER=catalog \
 
 mvn clean package spring-boot:repackage -DskipTests
 
+sleep 5
+
 oc new-build registry.access.redhat.com/ubi8/openjdk-11 --binary --name=catalog -l app=catalog
 oc start-build catalog --from-file=target/catalog-1.0.0-SNAPSHOT.jar --follow
 
