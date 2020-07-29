@@ -31,6 +31,7 @@ public class CatalogEndpoint {
     @GetMapping("/product/{id}")
     @CrossOrigin
     public ResponseEntity<Product> read(@PathVariable("id") String id) {
+        Metrics.counter("api.catalog.read.total", "api", "inventory", "method", "GET", "endpoint", "/product/" + id).increment();
         return new ResponseEntity<Product>(catalogService.read(id),HttpStatus.OK);
     }
 
