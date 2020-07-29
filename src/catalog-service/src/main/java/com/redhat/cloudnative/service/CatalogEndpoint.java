@@ -9,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import io.micrometer.core.instrument.Metrics;
+
+
 @Controller
 @RequestMapping("/api")
 public class CatalogEndpoint {
@@ -20,6 +23,7 @@ public class CatalogEndpoint {
     @GetMapping("/products")
     @CrossOrigin
     public ResponseEntity<List<Product>> readAll() {
+        Metrics.counter("api.catalog.readall.total").increment(1.0);
         return new ResponseEntity<List<Product>>(catalogService.readAll(),HttpStatus.OK);
     }
 
