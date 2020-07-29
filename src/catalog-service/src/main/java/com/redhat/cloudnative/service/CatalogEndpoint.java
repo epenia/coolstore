@@ -20,7 +20,6 @@ public class CatalogEndpoint {
     @GetMapping("/products")
     @CrossOrigin
     public ResponseEntity<List<Product>> readAll() {
-        Metrics.counter("api.catalog.readall.total", "api", "inventory", "method", "GET", "endpoint", "/inventory/" + id).increment();
         return new ResponseEntity<List<Product>>(catalogService.readAll(),HttpStatus.OK);
     }
 
