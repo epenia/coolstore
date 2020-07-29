@@ -24,7 +24,9 @@ spec:
       annotations:
         # disable istio-proxy injection
         sidecar.istio.io/inject: "false"
+        autoscaling.knative.dev/target: "1"
     spec:
+      containerConcurrency: 1
       containers:
       - image: image-registry.openshift-image-registry.svc:5000/$my_project/payment:latest
         ports:
