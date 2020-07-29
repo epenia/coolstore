@@ -23,3 +23,22 @@ oc label dc/catalog-database app.kubernetes.io/part-of=catalog app.openshift.io/
 oc annotate dc/catalog app.openshift.io/connects-to=inventory,catalog-database --overwrite && \
 oc annotate dc/catalog app.openshift.io/vcs-uri=https://github.com/luisarizmendi/coolstore.git --overwrite && \
 oc annotate dc/catalog app.openshift.io/vcs-ref=ocp-4.4 --overwrite
+
+oc create -f - <<EOF
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: prometheus
+  name: monitor
+spec:
+  endpoints:
+    - interval: 30s
+      path: /actuator/prometheus
+      port: 8080-tcp
+  namespaceSelector:
+    any: true
+  selector:
+    matchLabels:
+      app: catalog
+EOF
