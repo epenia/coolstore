@@ -16,7 +16,7 @@ objects:
 - kind: ServiceMeshControlPlane
   apiVersion: maistra.io/v1
   metadata:
-    name: basic-install
+    name: default
     namespace: "${NAMESPACE_ISTIO}"
   spec:
     istio:
@@ -34,6 +34,7 @@ objects:
           autoscaleEnabled: false
         istio-ingressgateway:
           autoscaleEnabled: false
+          ior_enabled: true
       mixer:
         policy:
           autoscaleEnabled: false

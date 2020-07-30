@@ -146,3 +146,95 @@ cd ..
 
 
 cd ..
+
+
+
+##############
+# INJECTING ISTIO SIDECAR
+##################################################3
+
+for i in inventory inventory-database catalog catalog-database cart datagrid-service order order-database coolstore-ui
+do
+ oc patch dc/$i -p '{"spec":{"template":{"metadata":{"annotations":{"sidecar.istio.io/inject":"true"}}}}}'
+done
+
+for i in  payment-v1-deployment
+do
+ oc patch deployment/$i -p '{"spec":{"template":{"metadata":{"annotations":{"sidecar.istio.io/inject":"true"}}}}}'
+done
+
+
+
+
+
+##############
+# Config ISTIO
+##################################################3
+
+my_project=$(oc project | awk -F \" '{print $2}')
+
+my_appsdomain=$(oc get route  | grep coolstore-ui | awk '{print $2}' | awk -F coolstore-ui-$my_project '{print $2}')
+
+oc create -f - <<EOF
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: coolstore-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "coolstore$my_appsdomain"
+EOF
+
+
+oc create -f - <<EOF
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: coolstore-vs
+spec:
+  hosts:
+  - "coolstore$my_appsdomain"
+  gateways:
+  - coolstore-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /coolstore
+    route:
+    - destination:
+        host: coolstore-ui
+        port:
+          number: 8080
+EOF
+
+
+
+oc create -f - <<EOF
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: coolstore-dr
+spec:
+  host: coolstore-ui
+  subsets:
+  - name: v1
+    labels:
+      version: 1.0.0
+EOF
+
+
+### Changing routes in annotations
+####
+
+
+echo ""
+echo ""
+echo "Connect to http://coolstore$my_appsdomain"
+echo ""
