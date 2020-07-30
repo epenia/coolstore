@@ -153,14 +153,12 @@ cd ..
 # INJECTING ISTIO SIDECAR
 ##################################################3
 
-for i in inventory inventory-database catalog catalog-database cart datagrid-service order order-database coolstore-ui
+for i in inventory catalog cart order coolstore-ui
 do
  oc patch dc/$i -p '{"spec":{"template":{"metadata":{"annotations":{"sidecar.istio.io/inject":"true"}}}}}'
-done
-
-for i in  payment-v1-deployment
-do
- oc patch deployment/$i -p '{"spec":{"template":{"metadata":{"annotations":{"sidecar.istio.io/inject":"true"}}}}}'
+ oc patch dc/$i -p '{"spec":{"template":{"metadata":{"labels":{"version":"v1"}}}}}'
+ oc patch dc/$i -p '{"metadata":{"labels":{"version":"v1"}}}'
+ oc rollout latest dc/$i
 done
 
 
@@ -226,7 +224,7 @@ spec:
   subsets:
   - name: v1
     labels:
-      version: 1.0.0
+      version: v1
 EOF
 
 
