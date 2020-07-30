@@ -22,7 +22,7 @@ spec:
     metadata:
       name: payment-v1
       annotations:
-        sidecar.istio.io/inject: "true"
+        sidecar.istio.io/inject: "false"
         autoscaling.knative.dev/target: "1"
       labels:
         version: "v1"
