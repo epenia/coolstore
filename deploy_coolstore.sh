@@ -163,10 +163,10 @@ my_appsdomain=$(oc get route  | grep coolstore-ui | awk '{print $2}' | awk -F co
 
 
 ## delete routes
-#for i in inventory catalog cart order coolstore-ui
-#do
-# oc delete route $i
-#done
+for i in inventory catalog cart order coolstore-ui
+do
+ oc delete route $i
+done
 
 
 
@@ -314,6 +314,10 @@ EOF
 
 
 
+for i in inventory catalog cart order coolstore-ui
+do
+ oc expose service/$i
+done
 
 
 
