@@ -16,19 +16,11 @@ objects:
 - kind: ServiceMeshControlPlane
   apiVersion: maistra.io/v1
   metadata:
-    name: default
-    namespace: "${NAMESPACE_ISTIO}"
+    name: basic-install
+    namespace: istio-system
   spec:
+    version: v1.1
     istio:
-      global:
-        proxy:
-          resources:
-            requests:
-              cpu: 100m
-              memory: 128Mi
-            limits:
-              cpu: 500m
-              memory: 128Mi
       gateways:
         istio-egressgateway:
           autoscaleEnabled: false
@@ -40,13 +32,6 @@ objects:
           autoscaleEnabled: false
         telemetry:
           autoscaleEnabled: false
-          resources:
-            requests:
-              cpu: 100m
-              memory: 1G
-            limits:
-              cpu: 500m
-              memory: 4G
       pilot:
         autoscaleEnabled: false
         traceSampling: 100

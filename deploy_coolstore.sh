@@ -149,19 +149,6 @@ cd ..
 
 
 
-##############
-# INJECTING ISTIO SIDECAR
-##################################################3
-
-for i in inventory catalog cart order coolstore-ui
-do
- oc patch dc/$i -p '{"spec":{"template":{"metadata":{"annotations":{"sidecar.istio.io/inject":"true"}}}}}'
- oc patch dc/$i -p '{"spec":{"template":{"metadata":{"labels":{"version":"v1"}}}}}'
- oc patch dc/$i -p '{"metadata":{"labels":{"version":"v1"}}}'
- oc rollout latest dc/$i
-done
-
-
 
 
 
@@ -169,9 +156,21 @@ done
 # Config ISTIO
 ##################################################3
 
+
 my_project=$(oc project | awk -F \" '{print $2}')
 
 my_appsdomain=$(oc get route  | grep coolstore-ui | awk '{print $2}' | awk -F coolstore-ui-$my_project '{print $2}')
+
+
+## delete routes
+#for i in inventory catalog cart order coolstore-ui
+#do
+# oc delete route $i
+#done
+
+
+
+
 
 oc create -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
@@ -187,24 +186,35 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - "coolstore$my_appsdomain"
+    - "coolstore-ui-${my_project}${my_appsdomain}"
+    - "inventory-${my_project}${my_appsdomain}"
+    - "catalog-${my_project}${my_appsdomain}"
+    - "cart-${my_project}${my_appsdomain}"
+    - "order-${my_project}${my_appsdomain}"
 EOF
+
+
+
+
+
+
+
 
 
 oc create -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: coolstore-vs
+  name: coolstore-ui-vs
 spec:
   hosts:
-  - "coolstore$my_appsdomain"
+  - "coolstore-ui-${my_project}${my_appsdomain}"
   gateways:
   - coolstore-gateway
   http:
   - match:
     - uri:
-        prefix: /coolstore
+        prefix: /
     route:
     - destination:
         host: coolstore-ui
@@ -213,23 +223,120 @@ spec:
 EOF
 
 
-
 oc create -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
-kind: DestinationRule
+kind: VirtualService
 metadata:
-  name: coolstore-dr
+  name: coolstore-inventory-vs
 spec:
-  host: coolstore-ui
-  subsets:
-  - name: v1
-    labels:
-      version: v1
+  hosts:
+  - "inventory-${my_project}${my_appsdomain}"
+  gateways:
+  - coolstore-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: inventory
+        port:
+          number: 8080
 EOF
 
 
-### Changing routes in annotations
-####
+oc create -f - <<EOF
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: coolstore-catalog-vs
+spec:
+  hosts:
+  - "catalog-${my_project}${my_appsdomain}"
+  gateways:
+  - coolstore-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /api/products
+    route:
+    - destination:
+        host: catalog
+        port:
+          number: 8080
+EOF
+
+
+
+oc create -f - <<EOF
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: coolstore-cart-vs
+spec:
+  hosts:
+  - "cart-${my_project}${my_appsdomain}"
+  gateways:
+  - coolstore-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /api/cart
+    route:
+    - destination:
+        host: cart
+        port:
+          number: 8080
+EOF
+
+
+oc create -f - <<EOF
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: coolstore-order-vs
+spec:
+  hosts:
+  - "order-${my_project}${my_appsdomain}"
+  gateways:
+  - coolstore-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /api/orders
+    route:
+    - destination:
+        host: order
+        port:
+          number: 8080
+EOF
+
+
+
+
+
+
+
+
+
+
+
+##############
+# INJECTING ISTIO SIDECAR
+##################################################3
+
+for i in inventory catalog cart order coolstore-ui
+do
+ oc rollout pause dc/$i
+ oc patch dc/$i -p '{"spec":{"template":{"metadata":{"annotations":{"sidecar.istio.io/inject":"true"}}}}}'
+ oc patch dc/$i -p '{"spec":{"template":{"metadata":{"labels":{"version":"v1"}}}}}'
+ oc patch dc/$i -p '{"metadata":{"labels":{"version":"v1"}}}'
+ oc rollout resume dc/$i
+ oc rollout latest dc/$i
+done
+
+
+
 
 
 echo ""

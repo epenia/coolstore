@@ -33,5 +33,5 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageValue: 200m
+        averageValue: 300m
 EOF
