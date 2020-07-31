@@ -9,6 +9,13 @@ cd src
 cd inventory-service
 chmod +x deploy_inventory.sh
 ./deploy_inventory.sh
+
+oc get dc inventory
+if [ $? -ne 0 ];
+then
+    ./deploy_inventory.sh
+fi
+
 cd ..
 
 
@@ -18,6 +25,13 @@ cd ..
 cd catalog-service
 chmod +x deploy_catalog.sh
 ./deploy_catalog.sh
+
+oc get dc catalog
+if [ $? -ne 0 ];
+then
+    ./deploy_catalog.sh
+fi
+
 cd ..
 
 
@@ -106,6 +120,13 @@ EOF
 cd cart-service
 chmod +x deploy_cart.sh
 ./deploy_cart.sh
+
+oc get dc cart
+if [ $? -ne 0 ];
+then
+    ./deploy_cart.sh
+fi
+
 cd ..
 
 
@@ -115,6 +136,13 @@ cd ..
 cd order-service
 chmod +x deploy_order.sh
 ./deploy_order.sh
+
+oc get dc order
+if [ $? -ne 0 ];
+then
+    ./deploy_order.sh
+fi
+
 cd ..
 
 
@@ -127,6 +155,13 @@ cd ..
 cd coolstore-ui
 chmod +x deploy_webui.sh
 ./deploy_webui.sh
+
+oc get dc coolstore-ui
+if [ $? -ne 0 ];
+then
+    ./deploy_webui.sh
+fi
+
 cd ..
 
 
@@ -140,6 +175,15 @@ cd ..
 cd payment-service
 chmod +x deploy_payment.sh
 ./deploy_payment.sh
+
+sleep 15
+
+oc get deployment payment-v1-deployment
+if [ $? -ne 0 ];
+then
+    ./deploy_payment.sh
+fi
+
 cd ..
 
 
