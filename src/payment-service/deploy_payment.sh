@@ -22,10 +22,11 @@ spec:
     metadata:
       name: payment-v1
       annotations:
-        sidecar.istio.io/inject: "false"
+        sidecar.istio.io/inject: "true"
         autoscaling.knative.dev/target: "1"
       labels:
         version: "v1"
+        maistra.io/expose-route: "true"
     spec:
       containerConcurrency: 1
       containers:
