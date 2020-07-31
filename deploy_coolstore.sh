@@ -384,12 +384,6 @@ spec:
 EOF
 
 
-for i in knative-serving-ingress knative-serving knative-eventing
-do
- oc label namespace $i knative.namespace=yes --overwrite
-done
-
-
 
 oc create -f - <<EOF
 apiVersion: networking.k8s.io/v1
@@ -400,9 +394,7 @@ spec:
   podSelector: {}
   ingress:
     - from:
-        - namespaceSelector:
-            matchLabels:
-              knative.namespace: yes
+        - namespaceSelector: {}
 EOF
 
 ##############
