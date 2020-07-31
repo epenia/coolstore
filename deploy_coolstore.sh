@@ -389,7 +389,7 @@ oc create -f - <<EOF
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-knative
+  name: allow-all-ns
 spec:
   podSelector: {}
   ingress:
