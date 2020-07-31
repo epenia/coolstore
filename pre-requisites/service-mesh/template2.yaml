@@ -17,7 +17,7 @@ objects:
   apiVersion: maistra.io/v1
   metadata:
     name: basic-install
-    namespace: istio-system
+    namespace: "${NAMESPACE_ISTIO}"
   spec:
     version: v1.1
     istio:
