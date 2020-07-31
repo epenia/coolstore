@@ -62,11 +62,12 @@ public class PaymentResource {
             String name = event.getString("name");
 
             // fake processing time
-            Thread.sleep(5000); 
+            Thread.sleep(5000);
             if (!ccDetails.getString("number").startsWith("4")) {
-                 fail(orderId, paymentId, "Invalid Credit Card: " + ccDetails.getString("number"));
+                fail(orderId, paymentId, "Invalid Credit Card: " + ccDetails.getString("number"));
+            } else {
+                pass(orderId, paymentId, "Payment of " + total + " succeeded for " + name + " CC details: " + ccDetails.toString());
             }
-             pass(orderId, paymentId, "Payment of " + total + " succeeded for " + name + " CC details: " + ccDetails.toString());
         } catch (Exception ex) {
              fail(orderId, paymentId, "Unknown error: " + ex.getMessage() + " for payment: " + payload);
         }
